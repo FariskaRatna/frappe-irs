@@ -187,16 +187,50 @@ class NotificationsView extends BaseNotificationsView {
 			.attr("title", __("Notifications"))
 			.tooltip({ delay: { show: 600, hide: 100 }, trigger: "hover" });
 
+		this.createUnreadCountElement();
+		this.applyUnreadCountStyles();
+
 		this.setup_notification_listeners();
 		this.get_notifications_list(this.max_length).then((r) => {
 			if (!r.message) return;
 			this.dropdown_items = r.message.notification_logs;
 			frappe.update_user_info(r.message.user_info);
 			this.render_notifications_dropdown();
+			this.display_unread_count();
 			if (this.settings.seen == 0 && this.dropdown_items.length > 0) {
 				this.toggle_notification_icon(false);
 			}
 		});
+	}
+
+	createUnreadCountElement() {
+		this.unreadCountElement = document.createElement('span')
+		this.unreadCountElement.classList.add('unread-count');
+		this.notifications_icon[0].appendChild(this.unreadCountElement);
+	}
+
+	applyUnreadCountStyles() {
+		$(this.unreadCountElement).css({
+			"position": "absolute",
+			"top": "-10px",
+			"right": "-10px",
+			"background-color": "red",
+			"color": "white",
+			"border-radius": "50%",
+			"padding": "2px 6px",
+			"font-size": "12px",
+			"font-weight": "bold",
+			"display": "none"
+		})
+	}
+
+	display_unread_count() {
+		let unreadCount = this.dropdown_items.filter(item => !item.read).length;
+		if (unreadCount > 0) {
+			$(this.unreadCountElement).text(unreadCount).css("display", "block");
+		} else {
+			$(this.unreadCountElement).css("display", "none");
+		}
 	}
 
 	update_dropdown() {
