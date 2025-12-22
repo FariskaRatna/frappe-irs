@@ -18,23 +18,7 @@
 						{{ file_size }}
 					</span>
 				</div>
-
-				<div class="flex config-area">
-					<label v-if="allow_toggle_optimize" class="frappe-checkbox"
-						><input
-							type="checkbox"
-							:checked="optimize"
-							@change="emit('toggle_optimize')"
-						/>{{ __("Optimize") }}</label
-					>
-					<label v-if="allow_toggle_private" class="frappe-checkbox"
-						><input
-							type="checkbox"
-							:checked="file.private"
-							@change="emit('toggle_private')"
-						/>{{ __("Private") }}</label
-					>
-				</div>
+				
 			</div>
 			<div class="file-actions">
 				<ProgressRing
